@@ -10,7 +10,7 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
 		}
 	}
 
-	onlyPollutants <- subset(mons, , select = c(pollutant, "ID"))
+	onlyPollutants <- subset(monitors, , select = c(pollutant, "ID"))
 	noNa <- onlyPollutants[complete.cases(onlyPollutants),]
 	subSetted <- subset(noNa, ID %in% id, select = pollutant)
 	mean(subSetted[[pollutant]])
