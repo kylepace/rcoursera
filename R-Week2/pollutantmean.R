@@ -1,8 +1,18 @@
+getFileString <- function(fileNo) {
+	asChar <- as.character(fileNo)
+	charCount <- nchar(asChar)		
+	if (charCount == 1) {
+		paste("00", as.character(fileNo), ".csv", sep = "")
+	} else if (charCount == 2) {
+		paste("0", as.character(fileNo), ".csv", sep = "")
+	} else {
+		paste(as.character(fileNo), ".csv", sep = "")
+	}
+}
+
 pollutantmean <- function(directory, pollutant, id = 1:332) {
-	## 'directory' is a character vector of length 1 indicating
-	## the location of the CSV files
-	for (file in list.files(directory)) {
-		fileName <- paste0(directory, '/', file)
+	for (file in id) {
+		fileName <- paste0(directory, '/', getFileString(file))
 		if (exists("monitors")) {
 			monitors <- rbindlist(list(monitors, read.csv(fileName)))
 		} else {
@@ -10,8 +20,6 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
 		}
 	}
 
-	onlyPollutants <- subset(monitors, , select = c(pollutant, "ID"))
-	noNa <- onlyPollutants[complete.cases(onlyPollutants),]
-	subSetted <- subset(noNa, ID %in% id, select = pollutant)
-	mean(subSetted[[pollutant]])
+	onlyPollutants <- subset(monitors, , select = c(pollutant))
+	mean(onlyPollutants[complete.cases(onlyPollutants), ])
 }
